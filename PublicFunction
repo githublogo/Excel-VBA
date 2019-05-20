@@ -1,1 +1,119 @@
+'..............................小数点位数判断.....................................
 
+Public Function xxd(t As Range) As Integer
+If t.Value >= 0 Then
+    If InStr(t.Text, ".") Then
+        xxd = Len(t.Text) - InStr(t.Text, ".")
+    Else
+        xxd = Len(t.Text) - Len(Int(t.Value))
+    End If
+Else
+    If InStr(t.Text, ".") Then
+        xxd = Len(t.Text) - InStr(t.Text, ".")
+    Else
+        xxd = Len(t.Text) - Len(Int(t.Value))
+    End If
+End If
+End Function
+'..............................小数点位数判断.....................................
+
+'.................................数据复制.....................................
+Public Sub copysub(arr() As Range, dr As Range)
+Dim n() As Integer, tn As Integer, i As Integer, x As Integer, rr As String, rg As Range, arrt As Variant, art As Range
+On Error GoTo errorhandler
+
+tn = 0
+x = 1
+ReDim n(1 To UBound(arr())) As Integer
+For i = 1 To UBound(arr())
+    n(i) = arr(i).Rows.Count
+    tn = tn + n(i)
+Next
+ReDim arrt(1 To tn) As Variant
+With Application.WorksheetFunction
+For i = 1 To UBound(arr())
+    For Each rg In arr(i)
+        If IsError(rg) Then
+            arrt(x) = ""
+        ElseIf rg = "/" Then
+            arrt(x) = ""
+        ElseIf Right(rg, 1) = "L" Then
+            arrt(x) = VBA.Round(CDec(dr / 2), xxd(dr))
+        Else
+            arrt(x) = rg
+        End If
+    x = x + 1
+    Next
+Next
+rr = "F2" & ":" & "F" & tn
+    Set art = Sheets("sheet1").Range(rr)
+        art.Value = Application.Transpose(arrt)
+End With
+errorhandler:
+Exit Sub
+End Sub
+'.................................数据复制.....................................
+
+'.................................获取系统版本.....................................
+Public Function GetWindowsVersion() As OSVERSIONINFO
+    Dim ver As OSVERSIONINFO
+    ver.dwOSVersionInfoSize = 148
+    GetVersionEx ver
+    With ver
+        Select Case .dwPlatformId
+            Case 1
+                Select Case .dwMinorVersion
+                    Case 0
+                        .OsName = "Windows 95"
+                    Case 10
+                        .OsName = "Windows 98"
+                    Case 90
+                        .OsName = "Windows Mellinnium"
+                End Select
+            Case 2
+                Select Case .dwMajorVersion
+                    Case 3
+                        .OsName = "Windows NT 3.51"
+                    Case 4
+                        .OsName = "Windows NT 4.0"
+                    Case 5
+                        If .dwMinorVersion = 0 Then
+                            .OsName = "Windows 2000"
+                        Else
+                            .OsName = "Windows XP"
+                        End If
+                    Case 6
+                        .OsName = "Windows 7"
+                End Select
+             Case Else
+                .OsName = "Failed"
+        End Select
+    End With
+    GetWindowsVersion = ver
+End Function
+'.................................获取系统版本.....................................
+
+'.................................保存文件.....................................
+Public Sub savesub(xname As String)
+Dim username As String, datetime As String, pname As String, fname As String, nl As String
+On Error GoTo errorhandler
+
+datetime = Format(Year(Now), yyyy) & "-" & Format(Month(Now), mm) & "-" & Format(Day(Now), dd)
+username = Get_User_Name
+vers = GetWindowsVersion.OsName
+If vers = "Windows 7" Then
+pname = "C:\Users\" & username & "\" & "Desktop" & "\" & xname & datetime & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls"
+Else
+pname = "C:\Documents and Settings\" & username & "\" & "桌面" & "\" & xname & datetime & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls"
+End If
+fname = "桌面" & "\" & xname & datetime & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls"
+Sheets("sheet1").Select
+Sheets("sheet1").Range("a1").Select
+nl = Chr(13) + Chr(10)
+ActiveWorkbook.SaveAs Filename:=pname, FileFormat:=xlNormal, Password:="", WriteResPassword:="", ReadOnlyRecommended:=False, CreateBackup:=False
+CommandButton1.Caption = "保存文件名:" & nl & fname
+
+errorhandler:
+Exit Sub
+End Sub
+'.................................保存文件.....................................
