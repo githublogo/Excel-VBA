@@ -1,0 +1,39 @@
+Public Type MethodProperty
+    analysis_method_Name As String
+    analysis_method_Detection As Double
+    analysis_method_Significantfigure As Integer
+    analysis_method_Decimal As Integer
+End Type
+
+Public Type MethodLibrary
+    analysis_project_Name As String
+    analysis_method_Version(1 To 3) As MethodProperty
+End Type
+
+Public Type WorksheetProperty
+    sheet_excel_Name As String
+    sheet_sheet_Name As String
+    sheet_Index As Integer
+    sheet_result_Column As String
+    sheet_blank_Sample As Integer
+    sheet_result_Rowbegin As Integer
+    sheet_result_Rowend As Integer
+    sheet_result_Range(1 To 3) As Range
+    sheet_curve_Y As Range
+    sheet_curve_X As Range
+    sheet_analysis_project_Cell As Range
+    sheet_analysis_method_Cell As Range
+    sheet_analysis_Detection_Cell  As Range
+End Type
+
+Public Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" _
+    (lpVersionInformation As OSVERSIONINFO) As Long
+Public Type OSVERSIONINFO
+    dwOSVersionInfoSize As Long
+    dwMajorVersion As Long
+    dwMinorVersion As Long
+    dwBuildNumber As Long
+    dwPlatformId As Long
+    szCSDVersion As String * 128        
+    OsName As String                    
+End Type
