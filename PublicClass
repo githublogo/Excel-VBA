@@ -25,9 +25,11 @@ Public Type WorksheetProperty
     sheet_result_Range() As Range
     sheet_curve_Y As Range
     sheet_curve_X As Range
+    sheet_curve_a_Range As Range
+    sheet_curve_b_Range As Range
     sheet_analysis_project_Cell As Range
     sheet_analysis_method_Cell As Range
-    sheet_analysis_Detection_Cell  As Range
+    sheet_analysis_Detection_Cell As Range
     sheet_quality_control_Name As String
     sheet_quality_control_parallel_Range As Range
     sheet_quality_control_parallel_Column As String
@@ -37,6 +39,9 @@ Public Type WorksheetProperty
     sheet_quality_control_parallel_Rowend As Integer
     sheet_quality_control_standard_Range As Range
     sheet_quality_control_standard_Column As String
+    sheet_quality_control_standard_origin_Column As String
+    sheet_quality_control_standard_recovery_amount_Column As String
+    sheet_quality_control_standard_recovery_Column As String
     sheet_quality_control_standard_Rowbegin As Integer
     sheet_quality_control_standard_Rowend As Integer
 End Type
