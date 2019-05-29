@@ -1,0 +1,64 @@
+Public Function pl(pn As Range, methodindex As Range, sign As Integer) As Variant
+Dim i As Integer, ProjectLibrary(1 To 288) As MethodLibrary
+On Error GoTo errorhandler
+
+ProjectLibrary(1).analysis_project_Name = "°±µª"
+ProjectLibrary(1).analysis_method_Version(1).analysis_method_Name = "Ë®ÖÊ °±µªµÄ²â¶¨ ÄÉÊÏÊÔ¼Á·Ö¹â¹â¶È·¨ (HJ 535-2009)"
+ProjectLibrary(1).analysis_method_Version(1).analysis_method_Detection = 0.025
+ProjectLibrary(1).analysis_method_Version(1).analysis_method_Significantfigure = 4
+ProjectLibrary(1).analysis_method_Version(1).analysis_method_Decimal = 3
+
+ProjectLibrary(1).analysis_project_Name = "°±µª"
+ProjectLibrary(1).analysis_method_Version(2).analysis_method_Name = "Ë®ÖÊ °±µªµÄ²â¶¨ Ë®ÑîËá·Ö¹â¹â¶È·¨ (HJ 536-2009)"
+ProjectLibrary(1).analysis_method_Version(2).analysis_method_Detection = 1
+ProjectLibrary(1).analysis_method_Version(2).analysis_method_Significantfigure = 4
+ProjectLibrary(1).analysis_method_Version(2).analysis_method_Decimal = 3
+
+ProjectLibrary(1).analysis_project_Name = "°±µª"
+ProjectLibrary(1).analysis_method_Version(3).analysis_method_Name = "Ë®ÖÊ °±µªµÄ²â¶¨ ÕôÁó-ÖÐºÍµÎ¶¨·¨ (HJ 537-2009)"
+ProjectLibrary(1).analysis_method_Version(3).analysis_method_Detection = 1
+ProjectLibrary(1).analysis_method_Version(3).analysis_method_Significantfigure = 4
+ProjectLibrary(1).analysis_method_Version(3).analysis_method_Decimal = 2
+
+ProjectLibrary(2).analysis_project_Name = "×ÜÁ×"
+ProjectLibrary(2).analysis_method_Version(1).analysis_method_Name = "Ë®ÖÊ ×ÜÁ×µÄ²â¶¨ îâËáï§·Ö¹â¹â¶È·¨ (GB 11893-1989)"
+ProjectLibrary(2).analysis_method_Version(1).analysis_method_Detection = 0.01
+ProjectLibrary(2).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(2).analysis_method_Version(1).analysis_method_Decimal = 2
+
+
+i = 1
+Do
+    If ProjectLibrary(i).analysis_project_Name = pn Then
+        If Not VBA.IsNumeric(Right(methodindex, 1)) Then
+            Select Case sign
+                Case 1
+                    pl = ProjectLibrary(i).analysis_method_Version(1).analysis_method_Name
+                Case 2
+                    pl = ProjectLibrary(i).analysis_method_Version(1).analysis_method_Detection
+                Case 3
+                    pl = ProjectLibrary(i).analysis_method_Version(1).analysis_method_Significantfigure
+                Case 4
+                    pl = ProjectLibrary(i).analysis_method_Version(1).analysis_method_Decimal
+            End Select
+            Exit Function
+        Else
+            Select Case sign
+                Case 1
+                    pl = ProjectLibrary(i).analysis_method_Version(Right(methodindex, 1)).analysis_method_Name
+                Case 2
+                    pl = ProjectLibrary(i).analysis_method_Version(Right(methodindex, 1)).analysis_method_Detection
+                Case 3
+                    pl = ProjectLibrary(i).analysis_method_Version(Right(methodindex, 1)).analysis_method_Significantfigure
+                Case 4
+                    pl = ProjectLibrary(i).analysis_method_Version(Right(methodindex, 1)).analysis_method_Decimal
+            End Select
+            Exit Function
+        End If
+    End If
+i = i + 1
+Loop
+
+errorhandler:
+Exit Function
+End Function
