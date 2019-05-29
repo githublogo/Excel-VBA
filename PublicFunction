@@ -1,23 +1,29 @@
-'..............................小数点位数判断.....................................
+Public Function av(sample1 As Range, sample2 As Range) As Variant
+On Error GoTo errorhandler
 
-Public Function xxd(t As Range) As Integer
-If t.Value >= 0 Then
-    If InStr(t.Text, ".") Then
-        xxd = Len(t.Text) - InStr(t.Text, ".")
-    Else
-        xxd = Len(t.Text) - Len(Int(t.Value))
-    End If
+If VBA.Right(sample1, 1) = "L" And VBA.Right(sample2, 1) = "L" Then
+    av = sample1
+ElseIf VBA.Right(sample1.Value, 1) = "L" Or VBA.Right(sample2.Value, 1) = "L" Then
+    av = "error"
 Else
+    av = WorksheetFunction.Text(VBA.Round(WorksheetFunction.Average(sample1.Value, sample2.Value), Application.Max(xxd(sample1), xxd(sample2))), "0." & WorksheetFunction.Rept("0", Application.Max(xxd(sample1), xxd(sample2))))
+End If
+
+errorhandler:
+Exit Function
+End Function
+Public Function xxd(t As Range) As Integer
+On Error GoTo errorhandler
+
     If InStr(t.Text, ".") Then
         xxd = Len(t.Text) - InStr(t.Text, ".")
     Else
         xxd = Len(t.Text) - Len(Int(t.Value))
     End If
-End If
-End Function
-'..............................小数点位数判断.....................................
 
-'.................................数据复制.....................................
+errorhandler:
+Exit Function
+End Function
 Public Sub copysub(arr() As Range, dd As Range)
 Dim n() As Integer, tn As Integer, i As Integer, x As Integer, rr As String, rg As Range, arrt As Variant, art As Range
 On Error GoTo errorhandler
@@ -53,8 +59,6 @@ End With
 errorhandler:
 Exit Sub
 End Sub
-'.................................数据复制.....................................
-
 Public Sub savesub(xname As String)
 Dim nl As String, t As String
 On Error GoTo errorhandler
@@ -63,7 +67,7 @@ Sheets("sheet1").Select
 Sheets("sheet1").Range("a1").Select
 nl = Chr(13) + Chr(10)
 ActiveWorkbook.SaveAs Filename:=CreateObject("WScript.Shell").SpecialFolders("Desktop") & "\" & xname & Format(Year(Now), yyyy) & "-" & Format(Month(Now), mm) & "-" & Format(Day(Now), dd) & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls", FileFormat:=xlNormal, Password:="", WriteResPassword:="", ReadOnlyRecommended:=False, CreateBackup:=False
-ActiveSheet.OLEObjects("CommandButton1").Object.Caption = "文件名:" & nl & xname & Format(Year(Now), yyyy) & "-" & Format(Month(Now), mm) & "-" & Format(Day(Now), dd) & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls"
+ActiveSheet.OLEObjects("CommandButton1").Object.Caption = "ÎÄ¼þÃû:" & nl & xname & Format(Year(Now), yyyy) & "-" & Format(Month(Now), mm) & "-" & Format(Day(Now), dd) & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls"
 
 errorhandler:
 Exit Sub
@@ -82,7 +86,7 @@ Else
             For i = 1 To UBound(samplerange())
                 For Each sr In samplerange(i)
                     If sr = "/" Then
-                        sr = acell.Value & "-平"
+                        sr = acell.Value & "-Æ½"
                     Sheets(qcname).Range(qcsample2column & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & sr.Row
                     Exit Sub
                     End If
@@ -90,6 +94,71 @@ Else
             Next
         End If
     Next
+End If
+
+errorhandler:
+Exit Sub
+End Sub
+Public Sub recoverysub(projectname As Range, methodname As Range, detectionrange As Range, curvea As Range, curveb As Range, recoveryamount As Variant, recoveryunit As Variant, acell As Range, samplerange As Range, qcoriginrange As Range, qcname As String, qcorigincolumn As String, asname As String, resultcolumn As String, qcrecoveryamountcolumn As String, qcrecoverycolumn As String)
+Dim sr As Range, qcr As Range
+On Error GoTo errorhandler
+
+If Intersect(acell, samplerange) Is Nothing Then
+    Exit Sub
+Else
+    If recoveryunit = "¦Ìg" Or recoveryunit = "mg" Or recoveryunit = "g" Then
+        For Each qcr In qcoriginrange
+            If qcr = "/" Then
+                qcr = acell
+                If Right(ActiveSheet.Range(resultcolumn & acell.Row), 1) = "L" Then
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row) = 0
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
+                Else
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).Formula = "=dpe((" & asname & "!" & Chr(Range(resultcolumn & 1).Column - 1 + 64) & acell.Row & "-" & asname & "!" & curvea.Address & ")/" & asname & "!" & curveb.Address & "," & asname & "!" & projectname.Address & "," & asname & "!" & methodname.Address & ")"
+                End If
+                For i = 1 To UBound(samplerange())
+                    For Each sr In samplerange(i)
+                        If sr = "/" Then
+                            sr = acell.Value & "-¼Ó±ê"
+                            Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row) = recoveryamount
+                            Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
+                            Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=dpe((" & asname & "!" & Chr(Range(resultcolumn & 1).Column - 1 + 64) & sr.Row & "-" & asname & "!" & curvea.Address & ")/" & asname & "!" & curveb.Address & "," & asname & "!" & projectname.Address & "," & asname & "!" & methodname.Address & ")"
+                            Sheets(qcname).Range("G10").Formula = "Ô­ÑùÆ·º¬Á¿" & " " & "(" & recoveryunit & ")"
+                            Sheets(qcname).Range("H10").Formula = "¼Ó±êº¬Á¿" & "     " & "(" & recoveryunit & ")"
+                            Sheets(qcname).Range("I10").Formula = "¼Ó±êºóº¬Á¿" & " " & "(" & recoveryunit & ")"
+                            Exit Sub
+                        End If
+                    Next
+                Next
+            End If
+        Next
+    Else
+        For Each qcr In qcoriginrange
+            If qcr = "/" Then
+                qcr = acell
+                If Right(ActiveSheet.Range(resultcolumn & acell.Row), 1) = "L" Then
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row) = 0
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
+                Else
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & acell.Row
+                End If
+                For i = 1 To UBound(samplerange())
+                    For Each sr In samplerange(i)
+                        If sr = "/" Then
+                            sr = acell.Value & "-¼Ó±ê"
+                        Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row) = recoveryamount
+                        Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
+                        Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & sr.Row
+                        Sheets(qcname).Range("G10").Formula = "Ô­ÑùÆ·Å¨¶È" & " " & "(" & recoveryunit & ")"
+                        Sheets(qcname).Range("H10").Formula = "¼Ó±êÅ¨¶È" & "     " & "(" & recoveryunit & ")"
+                        Sheets(qcname).Range("I10").Formula = "¼Ó±êºóÅ¨¶È" & " " & "(" & recoveryunit & ")"
+                        Exit Sub
+                        End If
+                    Next
+                Next
+            End If
+        Next
+    End If
 End If
 
 errorhandler:
@@ -119,5 +188,3 @@ Next
 errorhandler:
 Exit Sub
 End Sub
-
-
