@@ -1,0 +1,41 @@
+Private Sub CommandButton1_Click()
+Dim i As Integer, wp As WorksheetProperty
+On Error GoTo errorhandler
+
+wp.sheet_excel_Name = "¹â¶È·¨"
+wp.sheet_sheet_Name = "¼ÇÂ¼±í"
+wp.sheet_Index = 9
+wp.sheet_result_Column = "G"
+wp.sheet_blank_Sample = 2
+wp.sheet_result_Rowbegin = 9
+wp.sheet_result_Rowend = 28
+Set wp.sheet_analysis_project_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("E6")
+Set wp.sheet_analysis_method_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("H8")
+Set wp.sheet_analysis_Detection_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("I11")
+ReDim wp.sheet_result_Range(1 To wp.sheet_Index) As Range
+For i = 1 To wp.sheet_Index
+    If i = 1 Then
+        Set wp.sheet_result_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_result_Column & (wp.sheet_result_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_result_Column & wp.sheet_result_Rowend)
+    Else
+        Set wp.sheet_result_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_result_Column & wp.sheet_result_Rowbegin & ":" & wp.sheet_result_Column & wp.sheet_result_Rowend)
+    End If
+Next
+Call copysub(wp.sheet_result_Range(), wp.sheet_analysis_Detection_Cell)
+Call savesub(wp.sheet_excel_Name)
+
+errorhandler:
+Exit Sub
+End Sub
+Private Sub CommandButton2_Click()
+Dim wp As WorksheetProperty
+On Error GoTo errorhandler
+
+wp.sheet_sheet_Name = "¼ÇÂ¼±í"
+wp.sheet_quality_control_Name = "ÖÊ¿Ø·ÖÎö±í"
+Call printsub(wp.sheet_sheet_Name, wp.sheet_quality_control_Name)
+
+errorhandler:
+Exit Sub
+End Sub
+
+
