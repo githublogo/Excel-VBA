@@ -46,6 +46,37 @@ Else
     End If
 End If
 
+errorhandler:
+Exit Function
+End Function
+Public Function dpe(data As Variant, projectname As Range, methodname As Range) As Variant
+Dim lenleft As Integer, lenright As Integer, lenrighttrue As Integer
+On Error GoTo errorhandler
+
+If CDec(data) <= pl(projectname, methodname, 2) Then
+    dpe = pl(projectname, methodname, 2) & "L"
+Else
+    If CDec(data) < 1 And Abs(CDec(data)) < 1 Then
+        lenright = Len(Split(CDec(data), ".")(1))
+        lenrighttrue = Len(Split(CDec(data), ".")(1) * 1)
+            If pl(projectname, methodname, 4) <= lenright Then
+                dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+            Else
+                dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) + lenright - lenrighttrue))
+            End If
+    Else
+        lenleft = Len(Split(CDec(data), ".")(0) * 1)
+            If pl(projectname, methodname, 3) <= lenleft Then
+                dpe = datas(data, pl(projectname, methodname, 3))
+            Else
+                If pl(projectname, methodname, 3) - lenleft <= pl(projectname, methodname, 4) Then
+                    dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) - lenleft))
+                Else
+                    dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                End If
+            End If
+    End If
+End If
 
 errorhandler:
 Exit Function
