@@ -24,12 +24,15 @@ Public Function dp(data As Variant, lens As Integer, lend As Integer) As Variant
 Dim lenleft As Integer, lenright As Integer, lenrighttrue As Integer
 On Error GoTo errorhandler
 
-
 If CDec(data) < 1 And Abs(CDec(data)) < 1 Then
     lenright = Len(Split(CDec(data), ".")(1))
     lenrighttrue = Len(Split(CDec(data), ".")(1) * 1)
     If lend <= lenright Then
-        dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+        If lend = 0 Then
+            dp = WorksheetFunction.Text(datad(data, lend), "0" & WorksheetFunction.Rept("0", lend))
+        Else
+            dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+        End If
     Else
         dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lens + lenright - lenrighttrue))
     End If
@@ -41,7 +44,11 @@ Else
         If lens - lenleft <= lend Then
             dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lens - lenleft))
         Else
-            dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+            If lend = 0 Then
+                dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+            Else
+                dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+            End If
         End If
     End If
 End If
@@ -60,7 +67,11 @@ Else
         lenright = Len(Split(CDec(data), ".")(1))
         lenrighttrue = Len(Split(CDec(data), ".")(1) * 1)
             If pl(projectname, methodname, 4) <= lenright Then
-                dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                If pl(projectname, methodname, 4) = 0 Then
+                    dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0" & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                Else
+                    dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                End If
             Else
                 dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) + lenright - lenrighttrue))
             End If
@@ -72,7 +83,11 @@ Else
                 If pl(projectname, methodname, 3) - lenleft <= pl(projectname, methodname, 4) Then
                     dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) - lenleft))
                 Else
-                    dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                    If pl(projectname, methodname, 4) = 0 Then
+                        dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0" & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                    Else
+                        dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                    End If
                 End If
             End If
     End If
