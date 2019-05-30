@@ -6,23 +6,22 @@ If VBA.Right(sample1, 1) = "L" And VBA.Right(sample2, 1) = "L" Then
 ElseIf VBA.Right(sample1.Value, 1) = "L" Or VBA.Right(sample2.Value, 1) = "L" Then
     av = "error"
 Else
-    av = WorksheetFunction.Text(VBA.Round(WorksheetFunction.Average(sample1.Value, sample2.Value), Application.Max(xxd(sample1), xxd(sample2))), "0." & WorksheetFunction.Rept("0", Application.Max(xxd(sample1), xxd(sample2))))
+    If Application.Max(xxd(sample1), xxd(sample2)) = 0 Then
+        av = WorksheetFunction.Text(VBA.Round(WorksheetFunction.Average(sample1.Value, sample2.Value), Application.Max(xxd(sample1), xxd(sample2))), "0" & WorksheetFunction.Rept("0", Application.Max(xxd(sample1), xxd(sample2))))
+    Else
+        av = WorksheetFunction.Text(VBA.Round(WorksheetFunction.Average(sample1.Value, sample2.Value), Application.Max(xxd(sample1), xxd(sample2))), "0." & WorksheetFunction.Rept("0", Application.Max(xxd(sample1), xxd(sample2))))
+    End If
 End If
 
 errorhandler:
 Exit Function
 End Function
 Public Function xxd(t As Range) As Integer
-On Error GoTo errorhandler
-
     If InStr(t.Text, ".") Then
         xxd = Len(t.Text) - InStr(t.Text, ".")
     Else
         xxd = Len(t.Text) - Len(Int(t.Value))
     End If
-
-errorhandler:
-Exit Function
 End Function
 Public Sub copysub(arr() As Range, dd As Range)
 Dim n() As Integer, tn As Integer, i As Integer, x As Integer, rr As String, rg As Range, arrt As Variant, art As Range
@@ -168,6 +167,7 @@ Public Sub printsub(sname As String, qcname As String)
 Dim obj As OLEObject, n As Integer
 On Error GoTo errorhandler
 
+n = 0
 For Each obj In ActiveSheet.OLEObjects
     If TypeName(obj.Object) = "CheckBox" Then
         n = n + 1
@@ -176,8 +176,8 @@ Next
 For Each obj In ActiveSheet.OLEObjects
     If TypeName(obj.Object) = "CheckBox" Then
         If obj.Object.Value = True Then
-            If VBA.Right(obj.name, 1) <= n - 1 Then
-                Sheets(sname & VBA.Right(obj.name, 1)).PrintOut
+            If Mid(obj.name, Len(TypeName(obj.Object)) + 1, Len(obj.name) - Len(TypeName(obj.Object))) <= n - 1 Then
+                Sheets(sname & Mid(obj.name, Len(TypeName(obj.Object)) + 1, Len(obj.name) - Len(TypeName(obj.Object)))).PrintOut
             Else
                 Sheets(qcname).PrintOut
             End If
