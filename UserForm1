@@ -2,7 +2,7 @@ Private Sub CommandButton1_Click()
 Dim wp As WorksheetProperty, i As Integer
 On Error GoTo errorhandler
 
-wp.sheet_sheet_Name = "¼ÇÂ¼±í"
+wp.sheet_sheet_Name = "记录表"
 wp.sheet_Index = 3
 wp.sheet_sample_Column = "A"
 wp.sheet_result_Column = "G"
@@ -17,7 +17,7 @@ Set wp.sheet_analysis_method_Cell = ActiveSheet.Range("H7")
 Set wp.sheet_curve_a_Range = ActiveSheet.Range("K24")
 Set wp.sheet_curve_b_Range = ActiveSheet.Range("L24")
 
-wp.sheet_quality_control_Name = "ÖÊ¿Ø·ÖÎö±í"
+wp.sheet_quality_control_Name = "质控分析表"
 wp.sheet_quality_control_standard_Column = "F"
 wp.sheet_quality_control_standard_origin_Column = "G"
 wp.sheet_quality_control_standard_recovery_amount_Column = "H"
