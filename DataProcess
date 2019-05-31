@@ -73,7 +73,11 @@ Else
                     dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
                 End If
             Else
-                dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) + lenright - lenrighttrue))
+                If pl(projectname, methodname, 3) + lenright - lenrighttrue > pl(projectname, methodname, 4) Then
+                    dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                Else
+                    dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) + lenright - lenrighttrue))
+                End If
             End If
     Else
         lenleft = Len(Split(CDec(data), ".")(0) * 1)
