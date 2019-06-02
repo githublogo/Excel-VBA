@@ -1,41 +1,5 @@
 Private Sub CommandButton1_Click()
-Dim wp As WorksheetProperty, i As Integer
 On Error GoTo errorhandler
-
-wp.sheet_sheet_Name = "记录表"
-wp.sheet_Index = 3
-wp.sheet_sample_Column = "A"
-wp.sheet_result_Column = "G"
-wp.sheet_blank_Sample = 1
-wp.sheet_sample_Rowbegin = 9
-wp.sheet_sample_Rowend = 28
-wp.sheet_result_Rowbegin = 9
-wp.sheet_result_Rowend = 28
-Set wp.sheet_analysis_Detection_Cell = ActiveSheet.Range("I11")
-Set wp.sheet_analysis_project_Cell = ActiveSheet.Range("E6")
-Set wp.sheet_analysis_method_Cell = ActiveSheet.Range("H7")
-Set wp.sheet_curve_a_Range = ActiveSheet.Range("K24")
-Set wp.sheet_curve_b_Range = ActiveSheet.Range("L24")
-
-wp.sheet_quality_control_Name = "质控分析表"
-wp.sheet_quality_control_standard_Column = "F"
-wp.sheet_quality_control_standard_origin_Column = "G"
-wp.sheet_quality_control_standard_recovery_amount_Column = "H"
-wp.sheet_quality_control_standard_recovery_Column = "I"
-wp.sheet_quality_control_standard_Rowbegin = 12
-wp.sheet_quality_control_standard_Rowend = 24
-Set wp.sheet_quality_control_standard_Range = Sheets(wp.sheet_quality_control_Name).Range(wp.sheet_quality_control_standard_Column & wp.sheet_quality_control_standard_Rowbegin & ":" & wp.sheet_quality_control_standard_Column & wp.sheet_quality_control_standard_Rowend)
-ReDim wp.sheet_result_Range(1 To wp.sheet_Index) As Range
-ReDim wp.sheet_sample_Range(1 To wp.sheet_Index) As Range
-For i = 1 To wp.sheet_Index
-    If i = 1 Then
-        Set wp.sheet_result_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_result_Column & (wp.sheet_result_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_result_Column & wp.sheet_result_Rowend)
-        Set wp.sheet_sample_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_sample_Column & (wp.sheet_sample_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend)
-    Else
-        Set wp.sheet_result_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_result_Column & wp.sheet_result_Rowbegin & ":" & wp.sheet_result_Column & wp.sheet_result_Rowend)
-        Set wp.sheet_sample_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_sample_Column & wp.sheet_sample_Rowbegin & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend)
-    End If
-Next
 
 Call recoverysub(wp.sheet_analysis_project_Cell, wp.sheet_analysis_method_Cell, wp.sheet_analysis_Detection_Cell, wp.sheet_curve_a_Range, wp.sheet_curve_b_Range, UserForm1.TextBox1.Value, UserForm1.ComboBox1.Value, ActiveCell, ActiveSheet.Range(wp.sheet_sample_Column & (wp.sheet_sample_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend), wp.sheet_quality_control_standard_Range, wp.sheet_quality_control_Name, wp.sheet_quality_control_standard_origin_Column, ActiveSheet.name, wp.sheet_result_Column, wp.sheet_quality_control_standard_recovery_amount_Column, wp.sheet_quality_control_standard_recovery_Column)
 Unload UserForm1
@@ -44,5 +8,10 @@ errorhandler:
 Exit Sub
 End Sub
 Private Sub CommandButton2_Click()
+On Error GoTo errorhandler
+
 Unload UserForm1
+
+errorhandler:
+Exit Sub
 End Sub
