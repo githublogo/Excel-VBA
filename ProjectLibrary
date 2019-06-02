@@ -2,29 +2,84 @@ Public Function pl(pn As Range, methodindex As Range, sign As Integer) As Varian
 Dim i As Integer, ProjectLibrary(1 To 288) As MethodLibrary
 On Error GoTo errorhandler
 
-ProjectLibrary(1).analysis_project_Name = "°±µª"
-ProjectLibrary(1).analysis_method_Version(1).analysis_method_Name = "Ë®ÖÊ °±µªµÄ²â¶¨ ÄÉÊÏÊÔ¼Á·Ö¹â¹â¶È·¨ (HJ 535-2009)"
+ProjectLibrary(1).analysis_project_Name = "氨氮"
+ProjectLibrary(1).analysis_method_Version(1).analysis_method_Name = "水质 氨氮的测定 纳氏试剂分光光度法 (HJ 535-2009)"
 ProjectLibrary(1).analysis_method_Version(1).analysis_method_Detection = 0.025
 ProjectLibrary(1).analysis_method_Version(1).analysis_method_Significantfigure = 4
 ProjectLibrary(1).analysis_method_Version(1).analysis_method_Decimal = 3
 
-ProjectLibrary(1).analysis_project_Name = "°±µª"
-ProjectLibrary(1).analysis_method_Version(2).analysis_method_Name = "Ë®ÖÊ °±µªµÄ²â¶¨ Ë®ÑîËá·Ö¹â¹â¶È·¨ (HJ 536-2009)"
+ProjectLibrary(1).analysis_project_Name = "氨氮"
+ProjectLibrary(1).analysis_method_Version(2).analysis_method_Name = "水质 氨氮的测定 水杨酸分光光度法 (HJ 536-2009)"
 ProjectLibrary(1).analysis_method_Version(2).analysis_method_Detection = 1
 ProjectLibrary(1).analysis_method_Version(2).analysis_method_Significantfigure = 4
 ProjectLibrary(1).analysis_method_Version(2).analysis_method_Decimal = 3
 
-ProjectLibrary(1).analysis_project_Name = "°±µª"
-ProjectLibrary(1).analysis_method_Version(3).analysis_method_Name = "Ë®ÖÊ °±µªµÄ²â¶¨ ÕôÁó-ÖÐºÍµÎ¶¨·¨ (HJ 537-2009)"
+ProjectLibrary(1).analysis_project_Name = "氨氮"
+ProjectLibrary(1).analysis_method_Version(3).analysis_method_Name = "水质 氨氮的测定 蒸馏-中和滴定法 (HJ 537-2009)"
 ProjectLibrary(1).analysis_method_Version(3).analysis_method_Detection = 1
 ProjectLibrary(1).analysis_method_Version(3).analysis_method_Significantfigure = 4
 ProjectLibrary(1).analysis_method_Version(3).analysis_method_Decimal = 2
 
-ProjectLibrary(2).analysis_project_Name = "×ÜÁ×"
-ProjectLibrary(2).analysis_method_Version(1).analysis_method_Name = "Ë®ÖÊ ×ÜÁ×µÄ²â¶¨ îâËáï§·Ö¹â¹â¶È·¨ (GB 11893-1989)"
+ProjectLibrary(2).analysis_project_Name = "总磷"
+ProjectLibrary(2).analysis_method_Version(1).analysis_method_Name = "水质 总磷的测定 钼酸铵分光光度法 (GB 11893-1989)"
 ProjectLibrary(2).analysis_method_Version(1).analysis_method_Detection = 0.01
 ProjectLibrary(2).analysis_method_Version(1).analysis_method_Significantfigure = 3
 ProjectLibrary(2).analysis_method_Version(1).analysis_method_Decimal = 2
+
+ProjectLibrary(3).analysis_project_Name = "易释放氰"
+ProjectLibrary(3).analysis_method_Version(1).analysis_method_Name = "水质  氰化物的测定 容量法和分光光度法 (HJ 484-2009)"
+ProjectLibrary(3).analysis_method_Version(1).analysis_method_Detection = 0.004
+ProjectLibrary(3).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(3).analysis_method_Version(1).analysis_method_Decimal = 3
+
+ProjectLibrary(4).analysis_project_Name = "苯胺类"
+ProjectLibrary(4).analysis_method_Version(1).analysis_method_Name = "水质 苯胺类化合物的测定 N-(1-萘基)乙二胺偶氮分光光度法 (GB 11889-89)"
+ProjectLibrary(4).analysis_method_Version(1).analysis_method_Detection = 0.03
+ProjectLibrary(4).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(4).analysis_method_Version(1).analysis_method_Decimal = 3
+
+ProjectLibrary(5).analysis_project_Name = "挥发酚"
+ProjectLibrary(5).analysis_method_Version(1).analysis_method_Name = "水质 挥发酚的测定 4-氨基安替比林分光光度法 (HJ 503-2009)"
+ProjectLibrary(5).analysis_method_Version(1).analysis_method_Detection = 0.0003
+ProjectLibrary(5).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(5).analysis_method_Version(1).analysis_method_Decimal = 3
+
+ProjectLibrary(6).analysis_project_Name = "硫化物"
+ProjectLibrary(6).analysis_method_Version(1).analysis_method_Name = "水质  硫化物的测定 亚甲基蓝分光光度法 (GB/T 16489-1996)"
+ProjectLibrary(6).analysis_method_Version(1).analysis_method_Detection = 0.005
+ProjectLibrary(6).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(6).analysis_method_Version(1).analysis_method_Decimal = 3
+
+ProjectLibrary(6).analysis_project_Name = "硫化物"
+ProjectLibrary(6).analysis_method_Version(2).analysis_method_Name = "水质  硫化物的测定 碘量法 (HJ/T 60-2000)"
+ProjectLibrary(6).analysis_method_Version(2).analysis_method_Detection = 0.4
+ProjectLibrary(6).analysis_method_Version(2).analysis_method_Significantfigure = 3
+ProjectLibrary(6).analysis_method_Version(2).analysis_method_Decimal = 3
+
+ProjectLibrary(7).analysis_project_Name = "六价铬"
+ProjectLibrary(7).analysis_method_Version(1).analysis_method_Name = "水质 六价铬的测定 二苯碳酰二肼分光光度法 (GB 7467-1987)"
+ProjectLibrary(7).analysis_method_Version(1).analysis_method_Detection = 0.004
+ProjectLibrary(7).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(7).analysis_method_Version(1).analysis_method_Decimal = 3
+
+ProjectLibrary(8).analysis_project_Name = "总氮"
+ProjectLibrary(8).analysis_method_Version(1).analysis_method_Name = "水质 总氮的测定 碱性过硫酸钾消解紫外分光光度法 (HJ 636-2012)"
+ProjectLibrary(8).analysis_method_Version(1).analysis_method_Detection = 0.05
+ProjectLibrary(8).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(8).analysis_method_Version(1).analysis_method_Decimal = 2
+
+ProjectLibrary(8).analysis_project_Name = "总氮"
+ProjectLibrary(8).analysis_method_Version(2).analysis_method_Name = "水质 总氮的测定 连续流动-盐酸萘乙二胺分光光度法 (HJ 667-2013)"
+ProjectLibrary(8).analysis_method_Version(2).analysis_method_Detection = 0.05
+ProjectLibrary(8).analysis_method_Version(2).analysis_method_Significantfigure = 3
+ProjectLibrary(8).analysis_method_Version(2).analysis_method_Decimal = 2
+
+ProjectLibrary(9).analysis_project_Name = "阴离子洗涤剂"
+ProjectLibrary(9).analysis_method_Version(1).analysis_method_Name = "水质 阴离子表面活性剂的测定 亚甲蓝分光光度法 (GB 7494-1987)"
+ProjectLibrary(9).analysis_method_Version(1).analysis_method_Detection = 0.05
+ProjectLibrary(9).analysis_method_Version(1).analysis_method_Significantfigure = 3
+ProjectLibrary(9).analysis_method_Version(1).analysis_method_Decimal = 2
+
 
 
 i = 1
