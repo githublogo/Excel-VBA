@@ -1,0 +1,51 @@
+Public Function wp() As WorksheetProperty
+On Error GoTo errorhandler
+
+wp.sheet_excel_Name = "光度法"
+wp.sheet_sheet_Name = "记录表"
+wp.sheet_Index = 6
+wp.sheet_sample_Column = "A"
+wp.sheet_result_Column = "G"
+wp.sheet_blank_Sample = 2
+wp.sheet_sample_Rowbegin = 9
+wp.sheet_sample_Rowend = 28
+wp.sheet_result_Rowbegin = 9
+wp.sheet_result_Rowend = 28
+Set wp.sheet_analysis_project_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("E6")
+Set wp.sheet_analysis_method_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("H7")
+Set wp.sheet_analysis_Detection_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("I11")
+Set wp.sheet_curve_a_Range = ActiveSheet.Range("K24")
+Set wp.sheet_curve_b_Range = ActiveSheet.Range("L24")
+
+wp.sheet_quality_control_Name = "质控分析表"
+wp.sheet_quality_control_parallel_Column = "A"
+wp.sheet_quality_control_parallel_sample1_Column = "B"
+wp.sheet_quality_control_parallel_sample2_Column = "C"
+wp.sheet_quality_control_parallel_Rowbegin = 12
+wp.sheet_quality_control_parallel_Rowend = 24
+
+wp.sheet_quality_control_Name = "质控分析表"
+wp.sheet_quality_control_standard_Column = "F"
+wp.sheet_quality_control_standard_origin_Column = "G"
+wp.sheet_quality_control_standard_recovery_amount_Column = "H"
+wp.sheet_quality_control_standard_recovery_Column = "I"
+wp.sheet_quality_control_standard_Rowbegin = 12
+wp.sheet_quality_control_standard_Rowend = 24
+
+Set wp.sheet_quality_control_parallel_Range = Sheets(wp.sheet_quality_control_Name).Range(wp.sheet_quality_control_parallel_Column & wp.sheet_quality_control_parallel_Rowbegin & ":" & wp.sheet_quality_control_parallel_Column & wp.sheet_quality_control_parallel_Rowend)
+Set wp.sheet_quality_control_standard_Range = Sheets(wp.sheet_quality_control_Name).Range(wp.sheet_quality_control_standard_Column & wp.sheet_quality_control_standard_Rowbegin & ":" & wp.sheet_quality_control_standard_Column & wp.sheet_quality_control_standard_Rowend)
+ReDim wp.sheet_result_Range(1 To wp.sheet_Index) As Range
+ReDim wp.sheet_sample_Range(1 To wp.sheet_Index) As Range
+For i = 1 To wp.sheet_Index
+    If i = 1 Then
+        Set wp.sheet_result_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_result_Column & (wp.sheet_result_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_result_Column & wp.sheet_result_Rowend)
+        Set wp.sheet_sample_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_sample_Column & (wp.sheet_sample_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend)
+    Else
+        Set wp.sheet_result_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_result_Column & wp.sheet_result_Rowbegin & ":" & wp.sheet_result_Column & wp.sheet_result_Rowend)
+        Set wp.sheet_sample_Range(i) = Sheets(wp.sheet_sheet_Name & i).Range(wp.sheet_sample_Column & wp.sheet_sample_Rowbegin & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend)
+    End If
+Next
+
+errorhandler:
+Exit Function
+End Function
