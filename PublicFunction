@@ -17,11 +17,16 @@ errorhandler:
 Exit Function
 End Function
 Public Function xxd(t As Range) As Integer
+On Error GoTo errorhandler
+
     If InStr(t.Text, ".") Then
         xxd = Len(t.Text) - InStr(t.Text, ".")
     Else
         xxd = Len(t.Text) - Len(Int(t.Value))
     End If
+    
+errorhandler:
+Exit Function
 End Function
 Public Sub copysub(arr() As Range, dd As Range)
 Dim n() As Integer, tn As Integer, i As Integer, x As Integer, rr As String, rg As Range, arrt As Variant, art As Range
@@ -43,7 +48,11 @@ For i = 1 To UBound(arr())
         ElseIf rg = "/" Then
             arrt(x) = ""
         ElseIf Right(rg, 1) = "L" Then
-            arrt(x) = VBA.Round(CDec(dd / 2), xxd(dd))
+            If VBA.Round(CDec(dd / 2), xxd(dd)) = 0 Then
+                arrt(x) = VBA.Round(CDec(dd / 2), xxd(dd) + 1)
+            Else
+                arrt(x) = VBA.Round(CDec(dd / 2), xxd(dd))
+            End If
         Else
             arrt(x) = rg
         End If
@@ -66,7 +75,7 @@ Sheets("sheet1").Select
 Sheets("sheet1").Range("a1").Select
 nl = Chr(13) + Chr(10)
 ActiveWorkbook.SaveAs Filename:=CreateObject("WScript.Shell").SpecialFolders("Desktop") & "\" & xname & Format(Year(Now), yyyy) & "-" & Format(Month(Now), mm) & "-" & Format(Day(Now), dd) & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls", FileFormat:=xlNormal, Password:="", WriteResPassword:="", ReadOnlyRecommended:=False, CreateBackup:=False
-ActiveSheet.OLEObjects("CommandButton1").Object.Caption = "ÎÄ¼þÃû:" & nl & xname & Format(Year(Now), yyyy) & "-" & Format(Month(Now), mm) & "-" & Format(Day(Now), dd) & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls"
+ActiveSheet.OLEObjects("CommandButton1").Object.Caption = "文件名:" & nl & xname & Format(Year(Now), yyyy) & "-" & Format(Month(Now), mm) & "-" & Format(Day(Now), dd) & "(" & Format(Hour(Now), hh) & Format(Minute(Now), nn) & ")" & "." & "xls"
 
 errorhandler:
 Exit Sub
@@ -85,7 +94,7 @@ Else
             For i = 1 To UBound(samplerange())
                 For Each sr In samplerange(i)
                     If sr = "/" Then
-                        sr = acell.Value & "-Æ½"
+                        sr = acell.Value & "-平"
                     Sheets(qcname).Range(qcsample2column & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & sr.Row
                     Exit Sub
                     End If
@@ -105,7 +114,7 @@ On Error GoTo errorhandler
 If Intersect(acell, samplerange) Is Nothing Then
     Exit Sub
 Else
-    If recoveryunit = "¦Ìg" Or recoveryunit = "mg" Or recoveryunit = "g" Then
+    If recoveryunit = "μg" Or recoveryunit = "mg" Or recoveryunit = "g" Then
         For Each qcr In qcoriginrange
             If qcr = "/" Then
                 qcr = acell
@@ -118,13 +127,13 @@ Else
                 For i = 1 To UBound(samplerange())
                     For Each sr In samplerange(i)
                         If sr = "/" Then
-                            sr = acell.Value & "-¼Ó±ê"
+                            sr = acell.Value & "-加标"
                             Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row) = recoveryamount
                             Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
                             Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=dpe((" & asname & "!" & Chr(Range(resultcolumn & 1).Column - 1 + 64) & sr.Row & "-" & asname & "!" & curvea.Address & ")/" & asname & "!" & curveb.Address & "," & asname & "!" & projectname.Address & "," & asname & "!" & methodname.Address & ")"
-                            Sheets(qcname).Range("G10").Formula = "Ô­ÑùÆ·º¬Á¿" & " " & "(" & recoveryunit & ")"
-                            Sheets(qcname).Range("H10").Formula = "¼Ó±êº¬Á¿" & "     " & "(" & recoveryunit & ")"
-                            Sheets(qcname).Range("I10").Formula = "¼Ó±êºóº¬Á¿" & " " & "(" & recoveryunit & ")"
+                            Sheets(qcname).Range("G10").Formula = "原样品含量" & " " & "(" & recoveryunit & ")"
+                            Sheets(qcname).Range("H10").Formula = "加标含量" & "     " & "(" & recoveryunit & ")"
+                            Sheets(qcname).Range("I10").Formula = "加标后含量" & " " & "(" & recoveryunit & ")"
                             Exit Sub
                         End If
                     Next
@@ -144,13 +153,13 @@ Else
                 For i = 1 To UBound(samplerange())
                     For Each sr In samplerange(i)
                         If sr = "/" Then
-                            sr = acell.Value & "-¼Ó±ê"
+                            sr = acell.Value & "-加标"
                         Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row) = recoveryamount
                         Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
                         Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & sr.Row
-                        Sheets(qcname).Range("G10").Formula = "Ô­ÑùÆ·Å¨¶È" & " " & "(" & recoveryunit & ")"
-                        Sheets(qcname).Range("H10").Formula = "¼Ó±êÅ¨¶È" & "     " & "(" & recoveryunit & ")"
-                        Sheets(qcname).Range("I10").Formula = "¼Ó±êºóÅ¨¶È" & " " & "(" & recoveryunit & ")"
+                        Sheets(qcname).Range("G10").Formula = "原样品浓度" & " " & "(" & recoveryunit & ")"
+                        Sheets(qcname).Range("H10").Formula = "加标浓度" & "     " & "(" & recoveryunit & ")"
+                        Sheets(qcname).Range("I10").Formula = "加标后浓度" & " " & "(" & recoveryunit & ")"
                         Exit Sub
                         End If
                     Next
