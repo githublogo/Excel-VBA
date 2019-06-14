@@ -28,6 +28,21 @@ On Error GoTo errorhandler
 errorhandler:
 Exit Function
 End Function
+Public Function plf(pnt As Range, methodindext As Range, sign As Integer) As Variant
+On Error GoTo errorhandler
+
+Select Case sign
+    Case 1
+        plf = pl(pnt, methodindext).analysis_method_Name
+    Case 2
+        plf = pl(pnt, methodindext).analysis_method_Detection
+    Case 3
+        plf = pl(pnt, methodindext).analysis_method_liquid_Detection
+End Select
+
+errorhandler:
+Exit Function
+End Function
 Public Sub copysub(arr() As Range, dd As Range)
 Dim n() As Integer, tn As Integer, i As Integer, x As Integer, rr As String, rg As Range, arrt As Variant, art As Range
 On Error GoTo errorhandler
@@ -80,7 +95,7 @@ ActiveSheet.OLEObjects("CommandButton1").Object.Caption = "文件名:" & nl & xn
 errorhandler:
 Exit Sub
 End Sub
-Public Sub parallelsub(acell As Range, samplerange As Range, qcrange As Range, qcname As String, qcsample1column As String, asname As String, resultcolumn As String, qcsample2column As String)
+Public Sub parallelsub(acell As Range, wpt As WorksheetProperty, samplerange As Range, qcrange As Range, qcname As String, qcsample1column As String, asname As String, resultcolumn As String, qcsample2column As String)
 Dim sr As Range, qcr As Range
 On Error GoTo errorhandler
 
@@ -91,11 +106,11 @@ Else
         If qcr = "/" Then
             qcr = acell
             Sheets(qcname).Range(qcsample1column & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & acell.Row
-            For i = 1 To UBound(samplerange())
-                For Each sr In samplerange(i)
+            For i = 1 To UBound(wp.sheet_sample_Range())
+                For Each sr In wp.sheet_sample_Range(i)
                     If sr = "/" Then
                         sr = acell.Value & "-平"
-                    Sheets(qcname).Range(qcsample2column & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & sr.Row
+                    Sheets(qcname).Range(qcsample2column & qcr.Row).Formula = "=" & wp.sheet_sheet_Name & i & "!" & resultcolumn & sr.Row
                     Exit Sub
                     End If
                 Next
@@ -107,7 +122,7 @@ End If
 errorhandler:
 Exit Sub
 End Sub
-Public Sub recoverysub(projectname As Range, methodname As Range, detectionrange As Range, curvea As Range, curveb As Range, recoveryamount As Variant, recoveryunit As Variant, acell As Range, samplerange As Range, qcoriginrange As Range, qcname As String, qcorigincolumn As String, asname As String, resultcolumn As String, qcrecoveryamountcolumn As String, qcrecoverycolumn As String)
+Public Sub recoverysub(projectname As Range, wpt As WorksheetProperty, methodname As Range, detectionrange As Range, curvea As Range, curveb As Range, recoveryamount As Variant, recoveryunit As Variant, acell As Range, samplerange As Range, qcoriginrange As Range, qcname As String, qcorigincolumn As String, asname As String, resultcolumn As String, qcrecoveryamountcolumn As String, qcrecoverycolumn As String)
 Dim sr As Range, qcr As Range
 On Error GoTo errorhandler
 
@@ -120,17 +135,17 @@ Else
                 qcr = acell
                 If Right(ActiveSheet.Range(resultcolumn & acell.Row), 1) = "L" Then
                     Sheets(qcname).Range(qcorigincolumn & qcr.Row) = 0
-                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(wpt.sheet_analysis_Detection_Cell))
                 Else
                     Sheets(qcname).Range(qcorigincolumn & qcr.Row).Formula = "=dpe((" & asname & "!" & Chr(Range(resultcolumn & 1).Column - 1 + 64) & acell.Row & "-" & asname & "!" & curvea.Address & ")/" & asname & "!" & curveb.Address & "," & asname & "!" & projectname.Address & "," & asname & "!" & methodname.Address & ")"
                 End If
-                For i = 1 To UBound(samplerange())
-                    For Each sr In samplerange(i)
+                For i = 1 To UBound(wpt.sheet_sample_Range())
+                    For Each sr In wpt.sheet_sample_Range(i)
                         If sr = "/" Then
                             sr = acell.Value & "-加标"
                             Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row) = recoveryamount
-                            Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
-                            Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=dpe((" & asname & "!" & Chr(Range(resultcolumn & 1).Column - 1 + 64) & sr.Row & "-" & asname & "!" & curvea.Address & ")/" & asname & "!" & curveb.Address & "," & asname & "!" & projectname.Address & "," & asname & "!" & methodname.Address & ")"
+                            Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(wpt.sheet_analysis_Detection_Cell))
+                            Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=dpe((" & wpt.sheet_sheet_Name & i & "!" & Chr(Range(resultcolumn & 1).Column - 1 + 64) & sr.Row & "-" & asname & "!" & curvea.Address & ")/" & asname & "!" & curveb.Address & "," & asname & "!" & projectname.Address & "," & asname & "!" & methodname.Address & ")"
                             Sheets(qcname).Range("G10").Formula = "原样品含量" & " " & "(" & recoveryunit & ")"
                             Sheets(qcname).Range("H10").Formula = "加标含量" & "     " & "(" & recoveryunit & ")"
                             Sheets(qcname).Range("I10").Formula = "加标后含量" & " " & "(" & recoveryunit & ")"
@@ -146,17 +161,17 @@ Else
                 qcr = acell
                 If Right(ActiveSheet.Range(resultcolumn & acell.Row), 1) = "L" Then
                     Sheets(qcname).Range(qcorigincolumn & qcr.Row) = 0
-                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
+                    Sheets(qcname).Range(qcorigincolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(wpt.sheet_analysis_Detection_Cell))
                 Else
                     Sheets(qcname).Range(qcorigincolumn & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & acell.Row
                 End If
-                For i = 1 To UBound(samplerange())
-                    For Each sr In samplerange(i)
+                For i = 1 To UBound(wpt.sheet_sample_Range())
+                    For Each sr In wpt.sheet_sample_Range(i)
                         If sr = "/" Then
                             sr = acell.Value & "-加标"
                         Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row) = recoveryamount
-                        Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(detectionrange))
-                        Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=" & asname & "!" & resultcolumn & sr.Row
+                        Sheets(qcname).Range(qcrecoveryamountcolumn & qcr.Row).NumberFormatLocal = "0." & WorksheetFunction.Rept("0", xxd(wpt.sheet_analysis_Detection_Cell))
+                        Sheets(qcname).Range(qcrecoverycolumn & qcr.Row).Formula = "=" & wpt.sheet_sheet_Name & i & "!" & resultcolumn & sr.Row
                         Sheets(qcname).Range("G10").Formula = "原样品浓度" & " " & "(" & recoveryunit & ")"
                         Sheets(qcname).Range("H10").Formula = "加标浓度" & "     " & "(" & recoveryunit & ")"
                         Sheets(qcname).Range("I10").Formula = "加标后浓度" & " " & "(" & recoveryunit & ")"
