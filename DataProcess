@@ -1,3 +1,71 @@
+Public Function datas(d As Variant, dd As Integer) As Variant
+Dim splitdata As Variant, splitdatatemp1 As Variant, splitdatatemp2 As Variant, datadlength As Integer, datailength As Integer, datamultiple As Integer
+On Error GoTo errorhandler
+
+If CDec(d) < 1 And Abs(CDec(d)) < 1 Then
+    splitdata = Split(CDec(d), ".")(1)
+    datadlength = Len(splitdata) - Len(splitdata * 1)
+    datas = VBA.Round(CDec(d), dd + datadlength)
+Else
+    splitdata = Split(CDec(d), ".")(0) * 1
+    datamultiple = Len(splitdata)
+    splitdatatemp1 = CDec(d) / (10 ^ datamultiple)
+    splitdatatemp2 = Split(splitdatatemp1, ".")(1)
+    datailength = Len(splitdatatemp2) - Len(splitdatatemp2 * 1)
+    datas = VBA.Round(splitdatatemp1, dd + datailength) * (10 ^ datamultiple)
+End If
+
+errorhandler:
+Exit Function
+End Function
+Public Function datad(d As Variant, dd As Integer) As Variant
+On Error GoTo errorhandler
+
+datad = VBA.Round(CDec(d), dd)
+
+errorhandler:
+Exit Function
+End Function
+Public Function dp(data As Variant, lens As Integer, lend As Integer) As Variant
+Dim lenleft As Integer, lenright As Integer, lenrighttrue As Integer
+On Error GoTo errorhandler
+
+If CDec(data) < 1 And Abs(CDec(data)) < 1 Then
+    lenright = Len(Split(CDec(data), ".")(1))
+    lenrighttrue = Len(Split(CDec(data), ".")(1) * 1)
+    If lend <= lenright Then
+        If lend = 0 Then
+            dp = WorksheetFunction.Text(datad(data, lend), "0" & WorksheetFunction.Rept("0", lend))
+        Else
+            dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+        End If
+    Else
+        If lens + lenright - lenrighttrue > lend Then
+            dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lend))
+        Else
+            dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lens + lenright - lenrighttrue))
+        End If
+    End If
+Else
+    lenleft = Len(Split(CDec(data), ".")(0) * 1)
+    If lens <= lenleft Then
+        dp = datas(data, lens)
+    Else
+        If lens - lenleft <= lend Then
+            dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lens - lenleft))
+        Else
+            If lend = 0 Then
+                dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+            Else
+                dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
+            End If
+        End If
+    End If
+End If
+
+errorhandler:
+Exit Function
+End Function
 Public Function dpe(data As Variant, projectname As Range, methodname As Range) As Variant
 On Error GoTo errorhandler
 
