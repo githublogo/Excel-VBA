@@ -1,21 +1,21 @@
 Public Function wp() As WorksheetProperty
 On Error GoTo errorhandler
 
-wp.sheet_excel_Name = "光度法"
+wp.sheet_excel_Name = "土壤和沉积物"
 wp.sheet_sheet_Name = "记录表"
-wp.sheet_Index = 6
+wp.sheet_Index = 3
 wp.sheet_sample_Column = "A"
 wp.sheet_result_Column = "G"
-wp.sheet_blank_Sample = 2
+wp.sheet_blank_Sample = 0
 wp.sheet_sample_Rowbegin = 9
 wp.sheet_sample_Rowend = 28
 wp.sheet_result_Rowbegin = 9
 wp.sheet_result_Rowend = 28
-Set wp.sheet_analysis_project_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("E6")
+Set wp.sheet_analysis_project_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("F6")
 Set wp.sheet_analysis_method_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("H7")
-Set wp.sheet_analysis_Detection_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("I11")
-Set wp.sheet_curve_a_Range = ActiveSheet.Range("K24")
-Set wp.sheet_curve_b_Range = ActiveSheet.Range("L24")
+Set wp.sheet_analysis_Detection_Cell = Sheets(wp.sheet_sheet_Name & 1).Range("K21")
+Set wp.sheet_curve_a_Range = ActiveSheet.Range("I21")
+Set wp.sheet_curve_b_Range = ActiveSheet.Range("I22")
 
 wp.sheet_quality_control_Name = "质控分析表"
 wp.sheet_quality_control_parallel_Column = "A"
@@ -24,7 +24,6 @@ wp.sheet_quality_control_parallel_sample2_Column = "C"
 wp.sheet_quality_control_parallel_Rowbegin = 12
 wp.sheet_quality_control_parallel_Rowend = 24
 
-wp.sheet_quality_control_Name = "质控分析表"
 wp.sheet_quality_control_standard_Column = "F"
 wp.sheet_quality_control_standard_origin_Column = "G"
 wp.sheet_quality_control_standard_recovery_amount_Column = "H"
