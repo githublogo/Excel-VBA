@@ -1,8 +1,13 @@
 Public Type MethodProperty
+    analysis_method_project_Name As String
     analysis_method_Name As String
     analysis_method_Detection As Double
     analysis_method_Significantfigure As Integer
     analysis_method_Decimal As Integer
+    analysis_method_Divdevalue  As Variant
+    analysis_method_divdevalue_Significantfigure As Integer
+    analysis_method_divdevalue_Decimal As Integer
+    analysis_method_liquid_Detection As Double
 End Type
 
 Public Type MethodLibrary
