@@ -1,7 +1,8 @@
 Private Sub CommandButton1_Click()
 On Error GoTo errorhandler
 
-Call parallelsub(ActiveCell, wp, ActiveSheet.Range(wp.sheet_sample_Column & (wp.sheet_sample_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend), wp.sheet_quality_control_parallel_Range, wp.sheet_quality_control_Name, wp.sheet_quality_control_parallel_sample1_Column, ActiveSheet.name, wp.sheet_result_Column, wp.sheet_quality_control_parallel_sample2_Column)
+Call copysub(wp.sheet_result_Range(), wp.sheet_analysis_Detection_Cell)
+Call savesub(wp.sheet_excel_Name)
 
 errorhandler:
 Exit Sub
@@ -9,18 +10,15 @@ End Sub
 Private Sub CommandButton2_Click()
 On Error GoTo errorhandler
 
-UserForm1.ComboBox1.AddItem "μg"
-UserForm1.ComboBox1.AddItem "mg"
-UserForm1.ComboBox1.AddItem "g"
-UserForm1.ComboBox1.AddItem "μg/L"
-UserForm1.ComboBox1.AddItem "mg/L"
-UserForm1.ComboBox1.AddItem "g/L"
-Load UserForm1
-UserForm1.Show
+Call printsub(wp.sheet_sheet_Name, wp.sheet_quality_control_Name)
 
 errorhandler:
 Exit Sub
 End Sub
+
+
+
+
 
 
 
