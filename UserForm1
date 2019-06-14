@@ -1,7 +1,8 @@
+
 Private Sub CommandButton1_Click()
 On Error GoTo errorhandler
 
-Call recoverysub(wp.sheet_analysis_project_Cell, wp.sheet_analysis_method_Cell, wp.sheet_analysis_Detection_Cell, wp.sheet_curve_a_Range, wp.sheet_curve_b_Range, UserForm1.TextBox1.Value, UserForm1.ComboBox1.Value, ActiveCell, ActiveSheet.Range(wp.sheet_sample_Column & (wp.sheet_sample_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend), wp.sheet_quality_control_standard_Range, wp.sheet_quality_control_Name, wp.sheet_quality_control_standard_origin_Column, ActiveSheet.name, wp.sheet_result_Column, wp.sheet_quality_control_standard_recovery_amount_Column, wp.sheet_quality_control_standard_recovery_Column)
+Call recoverysub(wp.sheet_analysis_project_Cell, wp, wp.sheet_analysis_method_Cell, wp.sheet_analysis_Detection_Cell, wp.sheet_curve_a_Range, wp.sheet_curve_b_Range, UserForm1.TextBox1.Value, UserForm1.ComboBox1.Value, ActiveCell, ActiveSheet.Range(wp.sheet_sample_Column & (wp.sheet_sample_Rowbegin + wp.sheet_blank_Sample) & ":" & wp.sheet_sample_Column & wp.sheet_sample_Rowend), wp.sheet_quality_control_standard_Range, wp.sheet_quality_control_Name, wp.sheet_quality_control_standard_origin_Column, ActiveSheet.name, wp.sheet_result_Column, wp.sheet_quality_control_standard_recovery_amount_Column, wp.sheet_quality_control_standard_recovery_Column)
 Unload UserForm1
 
 errorhandler:
