@@ -1,109 +1,53 @@
-Public Function datas(d As Variant, dd As Integer) As Variant
-Dim splitdata As Variant, splitdatatemp1 As Variant, splitdatatemp2 As Variant, datadlength As Integer, datailength As Integer, datamultiple As Integer
-On Error GoTo errorhandler
-
-If CDec(d) < 1 And Abs(CDec(d)) < 1 Then
-    splitdata = Split(CDec(d), ".")(1)
-    datadlength = Len(splitdata) - Len(splitdata * 1)
-    datas = VBA.Round(CDec(d), dd + datadlength)
-Else
-    splitdata = Split(CDec(d), ".")(0) * 1
-    datamultiple = Len(splitdata)
-    splitdatatemp1 = CDec(d) / (10 ^ datamultiple)
-    splitdatatemp2 = Split(splitdatatemp1, ".")(1)
-    datailength = Len(splitdatatemp2) - Len(splitdatatemp2 * 1)
-    datas = VBA.Round(splitdatatemp1, dd + datailength) * (10 ^ datamultiple)
-End If
-
-errorhandler:
-Exit Function
-End Function
-Public Function datad(d As Variant, dd As Integer) As Variant
-On Error GoTo errorhandler
-
-datad = VBA.Round(CDec(d), dd)
-
-errorhandler:
-Exit Function
-End Function
-Public Function dp(data As Variant, lens As Integer, lend As Integer) As Variant
-Dim lenleft As Integer, lenright As Integer, lenrighttrue As Integer
-On Error GoTo errorhandler
-
-If CDec(data) < 1 And Abs(CDec(data)) < 1 Then
-    lenright = Len(Split(CDec(data), ".")(1))
-    lenrighttrue = Len(Split(CDec(data), ".")(1) * 1)
-    If lend <= lenright Then
-        If lend = 0 Then
-            dp = WorksheetFunction.Text(datad(data, lend), "0" & WorksheetFunction.Rept("0", lend))
-        Else
-            dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
-        End If
-    Else
-        If lens + lenright - lenrighttrue > lend Then
-            dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lend))
-        Else
-            dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lens + lenright - lenrighttrue))
-        End If
-    End If
-Else
-    lenleft = Len(Split(CDec(data), ".")(0) * 1)
-    If lens <= lenleft Then
-        dp = datas(data, lens)
-    Else
-        If lens - lenleft <= lend Then
-            dp = WorksheetFunction.Text(datas(data, lens), "0." & WorksheetFunction.Rept("0", lens - lenleft))
-        Else
-            If lend = 0 Then
-                dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
-            Else
-                dp = WorksheetFunction.Text(datad(data, lend), "0." & WorksheetFunction.Rept("0", lend))
-            End If
-        End If
-    End If
-End If
-
-errorhandler:
-Exit Function
-End Function
 Public Function dpe(data As Variant, projectname As Range, methodname As Range) As Variant
-Dim lenleft As Integer, lenright As Integer, lenrighttrue As Integer
 On Error GoTo errorhandler
 
-If CDec(data) <= pl(projectname, methodname, 2) Then
-    dpe = pl(projectname, methodname, 2) & "L"
+If CDec(data) <= pl(projectname, methodname).analysis_method_Detection Then
+    dpe = pl(projectname, methodname).analysis_method_Detection & "L"
 Else
-    If CDec(data) < 1 And Abs(CDec(data)) < 1 Then
-        lenright = Len(Split(CDec(data), ".")(1))
-        lenrighttrue = Len(Split(CDec(data), ".")(1) * 1)
-            If pl(projectname, methodname, 4) <= lenright Then
-                If pl(projectname, methodname, 4) = 0 Then
-                    dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0" & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
-                Else
-                    dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
-                End If
-            Else
-                If pl(projectname, methodname, 3) + lenright - lenrighttrue > pl(projectname, methodname, 4) Then
-                    dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
-                Else
-                    dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) + lenright - lenrighttrue))
-                End If
-            End If
-    Else
-        lenleft = Len(Split(CDec(data), ".")(0) * 1)
-            If pl(projectname, methodname, 3) <= lenleft Then
-                dpe = datas(data, pl(projectname, methodname, 3))
-            Else
-                If pl(projectname, methodname, 3) - lenleft <= pl(projectname, methodname, 4) Then
-                    dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname, 3)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 3) - lenleft))
-                Else
-                    If pl(projectname, methodname, 4) = 0 Then
-                        dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0" & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+    If pl(projectname, methodname).analysis_method_Divdevalue = "" Then
+        If CDec(data) < 1 And Abs(CDec(data)) < 1 Then
+                If pl(projectname, methodname).analysis_method_Decimal <= Len(Split(CDec(data), ".")(1)) Then
+                    If pl(projectname, methodname).analysis_method_Decimal = 0 Then
+                        dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname).analysis_method_Decimal), "0" & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_Decimal))
                     Else
-                        dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname, 4)), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname, 4)))
+                        dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname).analysis_method_Decimal), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_Decimal))
+                    End If
+                Else
+                    If pl(projectname, methodname).analysis_method_Significantfigure + Len(Split(CDec(data), ".")(1)) - Len(Split(CDec(data), ".")(1) * 1) > pl(projectname, methodname).analysis_method_Decimal Then
+                        dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname).analysis_method_Significantfigure), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_Decimal))
+                    Else
+                        dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname).analysis_method_Significantfigure), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_Significantfigure + Len(Split(CDec(data), ".")(1)) - Len(Split(CDec(data), ".")(1) * 1)))
                     End If
                 End If
+        Else
+                If pl(projectname, methodname).analysis_method_Significantfigure <= Len(Split(CDec(data), ".")(0) * 1) Then
+                    dpe = datas(data, pl(projectname, methodname).analysis_method_Significantfigure)
+                Else
+                    If pl(projectname, methodname).analysis_method_Significantfigure - Len(Split(CDec(data), ".")(0) * 1) <= pl(projectname, methodname).analysis_method_Decimal Then
+                        dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname).analysis_method_Significantfigure), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_Significantfigure - Len(Split(CDec(data), ".")(0) * 1)))
+                    Else
+                        If pl(projectname, methodname).analysis_method_Decimal = 0 Then
+                            dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname).analysis_method_Decimal), "0" & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_Decimal))
+                        Else
+                            dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname).analysis_method_Decimal), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_Decimal))
+                        End If
+                    End If
+                End If
+        End If
+    Else
+        If CDec(data) < pl(projectname, methodname).analysis_method_Divdevalue Then
+            If pl(projectname, methodname).analysis_method_divdevalue_Decimal = 0 Then
+                dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname).analysis_method_divdevalue_Decimal), "0" & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_divdevalue_Decimal))
+            Else
+                dpe = WorksheetFunction.Text(datad(data, pl(projectname, methodname).analysis_method_divdevalue_Decimal), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_divdevalue_Decimal))
             End If
+        Else
+            If pl(projectname, methodname).analysis_method_divdevalue_Significantfigure <= Len(Split(CDec(data), ".")(0) * 1) Then
+                dpe = datas(data, pl(projectname, methodname).analysis_method_divdevalue_Significantfigure)
+            Else
+                dpe = WorksheetFunction.Text(datas(data, pl(projectname, methodname).analysis_method_divdevalue_Significantfigure), "0." & WorksheetFunction.Rept("0", pl(projectname, methodname).analysis_method_divdevalue_Significantfigure - Len(Split(CDec(data), ".")(0) * 1)))
+            End If
+        End If
     End If
 End If
 
